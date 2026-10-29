@@ -173,7 +173,4 @@ To test different design limits or ambient temperatures, modify the dictionaries
 
 1. Wang, D., et al. (2018). *Heating performance evaluation of a CO₂ heat pump system for an electrical vehicle at cold ambient temperatures.* Applied Thermal Engineering.
 2. Mohaideen Abdul Khader, S. O., et al. (2025). *Comprehensive review of vapor injection heat pumps in electric vehicles.* Applied Thermal Engineering.
-
-```
-
 ```
