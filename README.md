@@ -1,57 +1,164 @@
 # Vapor-Injection-Heat-Pump-Optimization-for-Electric-Vehicle-Cold-Weather-Performance
-
-# Transcritical R744 EV Heat Pump Optimization: Baseline vs. FT-VI
-
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![CoolProp](https://img.shields.io/badge/CoolProp-6.4.3-green.svg)](http://www.coolprop.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Overview
-This repository contains a steady-state thermodynamic model evaluating a transcritical CO2 (R744) Electric Vehicle heat pump. It compares a conventional cycle (Case A) against a Flash-Tank Vapour-Injection (FT-VI) system (Case B)[cite: 2, 5]. The toolset optimizes the intermediate injection pressure ($P_{inj}$) to maximize heating Coefficient of Performance (COP) and capacity while strictly maintaining the compressor discharge temperature below 130 °C.
+##  Project Overview
+This repository contains a steady-state thermodynamic model evaluating a transcritical CO₂ (R744) heat pump designed for Electric Vehicle (EV) cabin heating in cold weather (down to -15 °C). 
 
-![System Schematic](figures/fig_schematic.png)
-*(Note: The system schematic above is generated automatically when the code is executed.)*
+The project evaluates and compares two system architectures:
+1. **Case A (Baseline):** A conventional vapor-compression heat pump cycle.
+2. **Case B (FT-VI):** A Flash-Tank Vapor Injection system that injects intermediate-pressure vapor into a two-stage compressor to improve heating capacity and COP while cooling the compressor discharge.
 
-## Features
-- **Parametric Sweeps:** Evaluates performance across compressor speeds (2500–8000 rpm), high-side pressures (8.0–12.0 MPa), and intermediate injection pressures (3.5–6.0 MPa)[cite: 1, 4].
-- **Accurate Fluid Properties:** Defaults to `CoolProp` (Span-Wagner EOS) for precise transcritical CO2 evaluation, with a built-in Peng-Robinson cubic EOS fallback.
-- **Automated Diagram Generation:** Automatically outputs P-h diagrams, T-s diagrams, system schematics, and Pareto contour maps.
-- **Design Constraints:** Ensures system feasibility by checking bounds, such as $P_{evap} < P_{inj} < P_{dis}$ and $T_{dis} \le 130 ^\circ \text{C}$[cite: 4, 5].
-
----
-
-## Repository Structure
-
-* **`run_all.py`**: The orchestration script that executes all calculations for Students 1 and 2, writes CSV/JSON outputs, and generates all figures[cite: 1].
-* **`baseline_cycle.py`**: Calculates the Student 1 baseline cycle and calibrates the compressor displacement for a target heating load[cite: 2].
-* **`flash_tank_vi.py`**: Implements the Student 2 FT-VI model, including adiabatic flash tank mass/energy balances and optimal intermediate pressure sweeps[cite: 5].
-* **`co2_props.py`**: The R744 property backend handling state-point queries. 
-* **`config.py`**: Stores all project brief data (ambient temperatures, target loads) and modelling assumptions (isentropic efficiency, superheat, volumetric efficiency trends).
+### Objectives & Optimization Framework
+* **Decision Variables:** Intermediate flash-tank pressure ($P_{inj}$), high-side discharge pressure ($P_{dis}$), and compressor speed.
+* **Objectives:** Maximize Heating COP, maximize heating capacity, and minimize compressor discharge temperature.
+* **Constraints:** Maintain compressor discharge temperature $\le$ 130 °C, discharge pressure $\le$ 12 MPa, and ensure cabin heating capacity meets the 5.0 kW target.
 
 ---
 
-## Prerequisites
+##  Thermodynamic Methodology
 
-- **Python 3.8+**
-- `numpy`[cite: 1, 3]
-- `scipy`[cite: 1, 3]
-- `matplotlib`[cite: 1]
-- `CoolProp` (Highly recommended for the most accurate property calculations)[cite: 3]
+### Student 1: Baseline Model (Case A)
+The conventional cycle models four main state points:
+* **1 to 2:** Isentropic compression (adjusted by $\eta_{is} = 0.70$).
+* **2 to 3:** Isobaric heat rejection in the gas cooler.
+* **3 to 4:** Isenthalpic expansion via an Electronic Expansion Valve (EEV).
+* **4 to 1:** Isobaric heat absorption in the evaporator.
 
-## Installation
+*Heating Capacity:* $Q_h = \dot{m} (h_2 - h_3)$  
+*Compressor Work:* $W = \dot{m} (h_2 - h_1)$
 
-**1. Clone the repository:**
+### Student 2: FT-VI Model (Case B)
+The FT-VI system utilizes two expansion stages and a flash tank to separate saturated liquid and vapor at an intermediate pressure ($P_{inj}$):
+* **Mass Balance:** The vapor quality at the flash tank inlet dictates the injection ratio. Vapor fraction $x = (h_6 - h_f) / (h_g - h_f)$.
+* **Injection Ratio:** $\xi = \frac{\dot{m}_{inj}}{\dot{m}_{suc}} = \frac{x}{1-x}$
+* **Two-Stage Compression:** Suction gas is compressed to $P_{inj}$, mixed adiabatically with the injected saturated vapor, and then compressed to $P_{dis}$. This lowers the final discharge temperature and boosts total mass flow through the gas cooler.
+
+---
+
+## Project Structure
+
+The repository is modularly designed with the following file structure:
+
+```text
+ev-heatpump-optimization/
+│
+├── run_all.py            # Main orchestration script: runs all sweeps, saves data, plots figures
+├── baseline_cycle.py     # Student 1 model: Conventional cycle & compressor displacement calibration
+├── flash_tank_vi.py      # Student 2 model: FT-VI cycle, mass/energy balances, P_inj sweeps
+├── co2_props.py          # Fluid property backend: Wraps CoolProp & built-in Peng-Robinson fallback
+├── config.py             # Global configuration: Project brief data, parameters, and assumptions
+├── README.md             # Project documentation
+│
+├── /results/             # (Auto-generated) Output CSV files and JSON handoff data
+└── /figures/             # (Auto-generated) P-h diagrams, T-s diagrams, maps, and schematics
+
+---
+
+##
+
+```markdown
+##  Installation & Setup
+
+To run this simulation locally, you will need **Python 3.8+** and a few scientific libraries.
+
+**1. Clone the repository**
 ```bash
 git clone [https://github.com/your-username/ev-heatpump-optimization.git](https://github.com/your-username/ev-heatpump-optimization.git)
 cd ev-heatpump-optimization
 
+```
+
+**2. Create and activate a virtual environment (Recommended)**
+
+* **Windows:**
+```bash
 python -m venv venv
 venv\Scripts\activate
 
+```
+
+
+* **macOS/Linux:**
+```bash
 python3 -m venv venv
 source venv/bin/activate
 
-python3 -m venv venv
-source venv/bin/activate
+```
 
+
+
+**3. Install the required dependencies**
+The primary dependencies are `numpy`, `scipy`, `matplotlib`, and `CoolProp`. Install them via pip:
+
+```bash
 pip install numpy scipy matplotlib CoolProp
+
+```
+
+*(Note: CoolProp is highly recommended for exact transcritical R744 property evaluations. If it fails to install, the code will seamlessly fall back to a built-in Peng-Robinson Equation of State model).*
+
+---
+
+##  Running the Code
+
+The entire simulation suite is automated. To execute the models, generate the CSV data tables, and create the optimization plots, simply run:
+
+```bash
 python run_all.py
+
+```
+
+### Forcing a Specific Thermodynamic Backend
+
+If you want to explicitly test the `CoolProp` (Span-Wagner EOS) backend vs. the built-in `Peng-Robinson` (PR) backend, use the `CO2_BACKEND` environment variable:
+
+
+**Force CoolProp:**
+* Windows (CMD): `set CO2_BACKEND=COOLPROP && python run_all.py`
+* macOS/Linux: `CO2_BACKEND=COOLPROP python run_all.py`
+
+
+**Force Built-in PR Fallback:**
+* Windows (CMD): `set CO2_BACKEND=PR && python run_all.py`
+* macOS/Linux: `CO2_BACKEND=PR python run_all.py`
+
+
+
+---
+
+##  Expected Outputs
+
+Upon running `run_all.py`, the script prints a console summary of the optimal operating points and generates two directories:
+
+### 1. `/results`
+
+Contains CSV tables documenting every parametric sweep (e.g., intermediate pressure sweeps at -5 °C, -10 °C, and -15 °C) and a `handoff_students_3_4.json` file containing the calculated state points required for later project phases.
+
+### 2. `/figures`
+
+* `fig_ph.png` & `fig_ts.png`: Thermodynamic state diagrams mapping the Baseline and FT-VI cycles.
+* `fig_schematic.png`: An automated system architecture diagram with state-point labels.
+* `fig_B_map.png`: Heatmaps plotting FT-VI COP and Capacity against $P_{inj}$ and $P_{dis}$.
+* `fig_A_Pdis.png` & `fig_B_Pinj.png`: Performance curves showing the effects of pressure variations.
+
+---
+
+## Configuration
+
+To test different design limits or ambient temperatures, modify the dictionaries directly in `config.py`:
+
+* `BRIEF`: Contains hard project constraints (e.g., $T_{amb} = -10$, $Q_{load} = 5.0$ kW, $T_{dis\_max} = 130$ °C).
+* `ASSUME`: Contains thermodynamic assumptions (e.g., superheat $= 5.0$ K, isentropic efficiency, volumetric efficiency factors).
+
+---
+
+##  References
+
+1. Wang, D., et al. (2018). *Heating performance evaluation of a CO₂ heat pump system for an electrical vehicle at cold ambient temperatures.* Applied Thermal Engineering.
+2. Mohaideen Abdul Khader, S. O., et al. (2025). *Comprehensive review of vapor injection heat pumps in electric vehicles.* Applied Thermal Engineering.
+
+```
+
+```
