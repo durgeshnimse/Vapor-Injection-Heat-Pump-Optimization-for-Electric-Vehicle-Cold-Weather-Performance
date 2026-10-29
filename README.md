@@ -19,7 +19,7 @@ The project evaluates and compares two system architectures:
 
 ##  Thermodynamic Methodology
 
-### Student 1: Baseline Model (Case A)
+### Chapter 1: Baseline Model (Case A)
 The conventional cycle models four main state points:
 * **1 to 2:** Isentropic compression (adjusted by $\eta_{is} = 0.70$).
 * **2 to 3:** Isobaric heat rejection in the gas cooler.
@@ -29,14 +29,37 @@ The conventional cycle models four main state points:
 *Heating Capacity:* $Q_h = \dot{m} (h_2 - h_3)$  
 *Compressor Work:* $W = \dot{m} (h_2 - h_1)$
 
-### Student 2: FT-VI Model (Case B)
+### Chapter 2: FT-VI Model (Case B)
 The FT-VI system utilizes two expansion stages and a flash tank to separate saturated liquid and vapor at an intermediate pressure ($P_{inj}$):
 * **Mass Balance:** The vapor quality at the flash tank inlet dictates the injection ratio. Vapor fraction $x = (h_6 - h_f) / (h_g - h_f)$.
-* **Injection Ratio:** $i = \frac{\dot{m}_{inj}}{\dot{m}_{suc}} = \frac{x}{1-x}$
+* **Injection Ratio:** $i = (Injected Vapor Mass Flow) / (Suction Mass Flow)$
 * **Two-Stage Compression:** Suction gas is compressed to $P_{inj}$, mixed adiabatically with the injected saturated vapor, and then compressed to $P_{dis}$. This lowers the final discharge temperature and boosts total mass flow through the gas cooler.
 
----
+### Chapter 3:
 
+
+
+
+### Chapter 3:
+
+
+
+
+###  Chapter 4:
+
+
+
+
+### Final Chapter :
+
+
+
+
+
+
+
+### To be Continued
+---
 ## Project Structure
 
 The repository is modularly designed with the following file structure:
@@ -59,6 +82,9 @@ ev-heatpump-optimization/
 ##
 
 ```markdown
+
+```
+
 ##  Installation & Setup
 
 To run this simulation locally, you will need **Python 3.8+** and a few scientific libraries.
@@ -67,11 +93,10 @@ To run this simulation locally, you will need **Python 3.8+** and a few scientif
 ```bash
 git clone [https://github.com/your-username/ev-heatpump-optimization.git](https://github.com/your-username/ev-heatpump-optimization.git)
 cd ev-heatpump-optimization
-
 ```
 
 **2. Create and activate a virtual environment (Recommended)**
-
+```bash
 * **Windows:**
 ```bash
 python -m venv venv
