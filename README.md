@@ -32,7 +32,7 @@ The conventional cycle models four main state points:
 ### Student 2: FT-VI Model (Case B)
 The FT-VI system utilizes two expansion stages and a flash tank to separate saturated liquid and vapor at an intermediate pressure ($P_{inj}$):
 * **Mass Balance:** The vapor quality at the flash tank inlet dictates the injection ratio. Vapor fraction $x = (h_6 - h_f) / (h_g - h_f)$.
-* **Injection Ratio:** $\xi = \frac{\dot{m}_{inj}}{\dot{m}_{suc}} = \frac{x}{1-x}$
+* **Injection Ratio:** $i = \frac{\dot{m}_{inj}}{\dot{m}_{suc}} = \frac{x}{1-x}$
 * **Two-Stage Compression:** Suction gas is compressed to $P_{inj}$, mixed adiabatically with the injected saturated vapor, and then compressed to $P_{dis}$. This lowers the final discharge temperature and boosts total mass flow through the gas cooler.
 
 ---
