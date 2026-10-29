@@ -40,10 +40,6 @@ The FT-VI system utilizes two expansion stages and a flash tank to separate satu
 
 
 
-### Phase 3:
-
-
-
 
 ###  Phase 4:
 
@@ -65,23 +61,17 @@ The FT-VI system utilizes two expansion stages and a flash tank to separate satu
 The repository is modularly designed with the following file structure:
 
 ```text
-ev-heatpump-optimization/
+Vapor-Injection-Heat-Pump-Optimization-for-Electric-Vehicle-Cold-Weather-Performance/
 │
 ├── run_all.py            # Main orchestration script: runs all sweeps, saves data, plots figures
-├── baseline_cycle.py     # Student 1 model: Conventional cycle & compressor displacement calibration
-├── flash_tank_vi.py      # Student 2 model: FT-VI cycle, mass/energy balances, P_inj sweeps
+├── baseline_cycle.py     # Conventional cycle & compressor displacement calibration
+├── flash_tank_vi.py      # FT-VI cycle, mass/energy balances, P_inj sweeps
 ├── co2_props.py          # Fluid property backend: Wraps CoolProp & built-in Peng-Robinson fallback
 ├── config.py             # Global configuration: Project brief data, parameters, and assumptions
 ├── README.md             # Project documentation
 │
-├── /results/             # (Auto-generated) Output CSV files and JSON handoff data
-└── /figures/             # (Auto-generated) P-h diagrams, T-s diagrams, maps, and schematics
-
----
-
-##
-
-```markdown
+├──RESULTS ├── /results/             # Output CSV files and JSON handoff data
+    └── /figures/             #  P-h diagrams, T-s diagrams, maps, and schematics
 
 ```
 
@@ -91,8 +81,8 @@ To run this simulation locally, you will need **Python 3.8+** and a few scientif
 
 **1. Clone the repository**
 ```bash
-git clone [https://github.com/your-username/ev-heatpump-optimization.git](https://github.com/your-username/ev-heatpump-optimization.git)
-cd ev-heatpump-optimization
+git clone https://github.com/durgeshnimse/Vapor-Injection-Heat-Pump-Optimization-for-Electric-Vehicle-Cold-Weather-Performance.git
+cd Vapor-Injection-Heat-Pump-Optimization-for-Electric-Vehicle-Cold-Weather-Performance
 ```
 
 **2. Create and activate a virtual environment (Recommended)**
@@ -174,7 +164,7 @@ Contains CSV tables documenting every parametric sweep (e.g., intermediate press
 
 To test different design limits or ambient temperatures, modify the dictionaries directly in `config.py`:
 
-* `BRIEF`: Contains hard project constraints (e.g., $T_{amb} = -10$, $Q_{load} = 5.0$ kW, $T_{dis\_max} = 130$ °C).
+* `BRIEF`: Contains hard constraints (e.g., $T_{amb} = -10$, $Q_{load} = 5.0$ kW, $T_{dis\_max} = 130$ °C).
 * `ASSUME`: Contains thermodynamic assumptions (e.g., superheat $= 5.0$ K, isentropic efficiency, volumetric efficiency factors).
 
 ---
